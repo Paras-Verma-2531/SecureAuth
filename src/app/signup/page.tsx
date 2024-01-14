@@ -3,16 +3,26 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [user, setUser] = useState({
     email: "",
     password: "",
+    username: "",
   });
-  async function onLogin() {}
+  async function onSignup() {}
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>Login</h1>
+      <h1>Signup</h1>
       <hr />
+      <label htmlFor="username">username</label>
+      <input
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
+        id="username"
+        type="text"
+        value={user.username}
+        onChange={(e) => setUser({ ...user, username: e.target.value })}
+        placeholder="username"
+      />
       <label htmlFor="email">email</label>
       <input
         className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
@@ -32,12 +42,12 @@ export default function LoginPage() {
         placeholder="password"
       />
       <button
-        onClick={onLogin}
+        onClick={onSignup}
         className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
       >
-        Login here
+        Signup here
       </button>
-      <Link href="/signup">Visit Signup page</Link>
+      <Link href="/login">Visit Login page</Link>
     </div>
   );
 }
