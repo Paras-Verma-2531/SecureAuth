@@ -32,5 +32,5 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 //because in nextJs file run again and again thus to prevent model being recreated below syntaxi used
-const User = mongoose.models.users||mongoose.model("User", userSchema);
+const User = mongoose.models.User||mongoose.model("User", userSchema);
 export default User;
