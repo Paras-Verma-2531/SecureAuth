@@ -15,13 +15,21 @@ export default function SignupPage() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/signup", user);
-      console.log(response.data);
-      router.push("/login");
+      const { message, error } = response.data;
+      if (error) toast.error(error);
+      else {
+        toast.success(message);
+        router.push("/login");
+      }
     } catch (error: any) {
-      console.log(error.message);
       toast.error(error.message);
     } finally {
       setLoading(false);
+      setUser({
+        email: "",
+        password: "",
+        username: "",
+      });
     }
   }
   const [buttonDisabled, setButtonDisabled] = useState(false);

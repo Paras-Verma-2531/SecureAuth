@@ -4,7 +4,7 @@ import User from "@/models/user";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-connect()
+connect();
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
@@ -16,17 +16,12 @@ export async function POST(request: NextRequest) {
         status: "400",
       });
     const user = await User.findOne({ email });
-    if (!user) {
-      console.log('entering here')
-      return NextResponse.json(
-        { error: "User does not exists" }
-        
-      );
-    }
+    if (!user) return NextResponse.json({ error: "User does not exists" });
+
     //verify password
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid)
-      return NextResponse.json({ error: "Password Incorrect", status: "400" });
+      return NextResponse.json({ error: "Invalid Password", status: "400" });
     //token creation
     const accessToken = createAccessToken({ _id: user._id, email });
     const response = NextResponse.json({
@@ -38,8 +33,11 @@ export async function POST(request: NextRequest) {
     });
     return response;
   } catch (error: any) {
-    console.log("error in login route")
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.log("error in login route");
+    return NextResponse.json({
+      error: error.message,
+      status: 500,
+    });
   }
 }
 function createAccessToken(payload: any) {

@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
 export default function LoginPage() {
   const [user, setUser] = useState({
     email: "",
@@ -12,10 +13,14 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
-      console.log(response.data);
-      router.push("/profile");
+      const { message, error } = response.data;
+      if (error) toast.error(error);
+      else {
+        toast.success(message);
+        router.push("/profile");
+      }
     } catch (error: any) {
-      console.log(error.message);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
