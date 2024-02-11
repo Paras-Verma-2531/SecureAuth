@@ -25,7 +25,7 @@ export default function LoginPage() {
       setLoading(false);
     }
   }
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   useEffect(() => {
