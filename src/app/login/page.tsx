@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
+import ClipLoader from "react-spinners/ClipLoader";
 export default function LoginPage() {
   const [user, setUser] = useState({
     email: "",
@@ -23,6 +24,10 @@ export default function LoginPage() {
       toast.error(error.message);
     } finally {
       setLoading(false);
+      setUser({
+        email: "",
+        password: "",
+      });
     }
   }
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -35,7 +40,7 @@ export default function LoginPage() {
   }, [user]);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>{loading ? "Processing" : "Login"}</h1>
+      <h1>Login</h1>
       <hr />
       <label htmlFor="email">email</label>
       <input
@@ -55,13 +60,21 @@ export default function LoginPage() {
         onChange={(e) => setUser({ ...user, password: e.target.value })}
         placeholder="password"
       />
-      <button
-        onClick={onLogin}
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
-      >
-        {buttonDisabled ? "No Login" : "Login"}
-      </button>
-      <Link href="/signup">Visit Signup page</Link>
+      {loading ? (
+        <ClipLoader color="B4B4B8" loading={loading} size={40} />
+      ) : (
+        <button
+          onClick={onLogin}
+          className={`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 ${
+            buttonDisabled
+              ? "cursor-not-allowed border-gray-200"
+              : "cursor-pointer"
+          }`}
+        >
+          Login
+        </button>
+      )}
+      {!loading && <Link href="/signup">Visit Signup page</Link>}
     </div>
   );
 }
