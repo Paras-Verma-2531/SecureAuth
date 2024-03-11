@@ -33,7 +33,7 @@ export default function SignupPage() {
       });
     }
   }
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   useEffect(() => {
@@ -77,16 +77,15 @@ export default function SignupPage() {
         placeholder="password"
       />
       {loading ? (
-        <ClipLoader 
-        color="B4B4B8" 
-        loading={loading}
-        size={40} />
+        <ClipLoader color="B4B4B8" loading={loading} size={40} />
       ) : (
         <button
           onClick={onSignup}
-          className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
+          className={`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 ${
+            buttonDisabled ? "cursor-not-allowed border-gray-200" : "cursor-pointer"
+          }`}
         >
-          {buttonDisabled ? "No Signup" : "Signup"}
+          Signup
         </button>
       )}
       <Link href="/login">Visit Login page</Link>
