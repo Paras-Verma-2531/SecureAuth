@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
     const { email, password } = reqBody;
-    console.log(reqBody);
     if (!email && !password)
       return NextResponse.json({
         error: "Email or Password is missing",

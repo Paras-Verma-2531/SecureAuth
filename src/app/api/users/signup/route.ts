@@ -10,22 +10,19 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { username, email, password } = reqBody;
     //check if user already exists
-    const user = await User.findOne({ email });
+    const user = await User.findOne({$or:[{email},{username}]});
     if (user) {
-      return NextResponse.json({ error: "User already exists" });
+      return NextResponse.json({ error: "UserName or email already exists" });
     }
 
     //hash password
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
-    const newUser = new User({
+    await User.create({
       username,
       email,
       password: hashedPassword,
     });
-
-    const savedUser = await newUser.save();
-    console.log(savedUser);
     return NextResponse.json({
       message: "User Registered",
       success: true,
