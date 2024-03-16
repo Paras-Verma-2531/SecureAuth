@@ -80,9 +80,12 @@ export default function SignupPage() {
         <ClipLoader color="B4B4B8" loading={loading} size={40} />
       ) : (
         <button
+          disabled={buttonDisabled}
           onClick={onSignup}
           className={`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 ${
-            buttonDisabled ? "cursor-not-allowed border-gray-200" : "cursor-pointer"
+            buttonDisabled
+              ? "cursor-not-allowed border-gray-200"
+              : "cursor-pointer"
           }`}
         >
           Signup

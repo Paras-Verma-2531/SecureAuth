@@ -64,6 +64,7 @@ export default function LoginPage() {
         <ClipLoader color="B4B4B8" loading={loading} size={40} />
       ) : (
         <button
+          disabled={buttonDisabled}
           onClick={onLogin}
           className={`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 ${
             buttonDisabled
