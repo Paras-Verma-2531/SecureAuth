@@ -1,30 +1,55 @@
+import User from "@/models/user";
 import nodemailer from "nodemailer";
-
-export const sendMail=async({email,emailType,userId}:any)=>
-{
+import jwt from "jsonwebtoken";
+export const sendMail = async ({ email, emailType, userId }: any) => {
   try {
-
-
-    //TODO:
+    const token = generateToken(email);
+    if (emailType === "VERIFY") {
+      await User.findByIdAndUpdate(userId, {
+        verifyToken: token,
+        verifyTokenExpiry: Date.now() + 3600000,
+      });
+    }
+    if (emailType === "RESET") {
+      await User.findByIdAndUpdate(userId, {
+        forgotPasswordToken: token,
+        forgotPasswordTokenExpiry: Date.now() + 3600000,
+      });
+    }
     const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false, // Use `true` for port 465, `false` for all other ports
+      host: "sandbox.smtp.mailtrap.io",
+      port: 2525,
       auth: {
-        user: "maddison53@ethereal.email",
-        pass: "jn7jnAPss4f63QBp6D",
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASS,
       },
     });
     //mailOptions
     const mailOptions = {
-      from: '"paras@paras.ai', // sender address
-      to:email,
-      subject: emailType=== "VERIFY"?"Verify your email":" Reset your password!",
-      html: "<b>Hello world?</b>", // html body
+      from: 'paras@paras.ai', // sender address
+      to: email,
+      subject:
+        emailType === "VERIFY" ? "Verify your email" : " Reset your password!",
+      html: `<p>Click <a href="${
+        process.env.DOMAIN
+      }/verifyemail?token=${token}">here</a> to ${
+        emailType === "VERIFY" ? "verify your email" : "reset your password"
+      }
+            or copy and paste the link below in your browser. <br> ${
+              process.env.DOMAIN
+            }/verifyemail?token=${token}
+            </p>`,
     };
-    const mailResponse = await transporter.sendMail(mailOptions)
+    const mailResponse = await transporter.sendMail(mailOptions);
     return mailResponse;
-  } catch (error:any) {
-    throw new Error(error.message)
+  } catch (error: any) {
+    throw new Error(error.message);
   }
-}
+};
+//helper function
+const generateToken = (payload: any) => {
+  const token = jwt.sign(payload, process.env.TOKEN_SECRET!, {
+    expiresIn: "1h",
+  });
+  return token;
+};
