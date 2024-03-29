@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
       emailType: "VERIFY",
       userId: savedUser._id,
     });
+    //console.log("mail response ",mailResponse);
     return NextResponse.json({
       message: "User Registered successfully",
       success: true,

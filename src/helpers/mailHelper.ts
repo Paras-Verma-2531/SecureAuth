@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 export const sendMail = async ({ email, emailType, userId }: any) => {
   try {
-    const token = generateToken(email);
+    const token = generateToken({email});
     if (emailType === "VERIFY") {
       await User.findByIdAndUpdate(userId, {
         verifyToken: token,
@@ -43,13 +43,11 @@ export const sendMail = async ({ email, emailType, userId }: any) => {
     const mailResponse = await transporter.sendMail(mailOptions);
     return mailResponse;
   } catch (error: any) {
-    throw new Error(error.message);
+    throw new Error("error in nodemailer " +error.message);
   }
 };
 //helper function
-const generateToken = (payload: any) => {
-  const token = jwt.sign(payload, process.env.TOKEN_SECRET!, {
-    expiresIn: "1h",
-  });
+const generateToken = (payload: {email:string}) => {
+  const token = jwt.sign(payload, process.env.TOKEN_SECRET!,{expiresIn:"1h"});
   return token;
 };
