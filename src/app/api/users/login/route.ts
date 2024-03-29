@@ -22,9 +22,9 @@ export async function POST(request: NextRequest) {
     if (!isPasswordValid)
       return NextResponse.json({ error: "Invalid Password", status: "400" });
     //token creation
-    const accessToken = createAccessToken({ _id: user._id, email });
+    const accessToken = createAccessToken({ _id: user._id});
     const response = NextResponse.json({
-      message: "Login successfull",
+      message: "User LoggedIn",
       status: true,
     });
     response.cookies.set("accessToken", accessToken, {
@@ -32,7 +32,6 @@ export async function POST(request: NextRequest) {
     });
     return response;
   } catch (error: any) {
-    console.log("error in login route");
     return NextResponse.json({
       error: error.message,
       status: 500,
