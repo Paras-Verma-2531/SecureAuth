@@ -9,11 +9,17 @@ export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
     const { email, password } = reqBody;
-    if (!email && !password)
+    if (!email)
       return NextResponse.json({
-        error: "Email or Password is missing",
+        error: "Email required",
         status: "400",
       });
+    if (!password) {
+      return NextResponse.json({
+        error: "Password required",
+        status: "400",
+      });
+    }
     const user = await User.findOne({ email });
     if (!user) return NextResponse.json({ error: "User does not exists" });
 
@@ -22,7 +28,7 @@ export async function POST(request: NextRequest) {
     if (!isPasswordValid)
       return NextResponse.json({ error: "Invalid Password", status: "400" });
     //token creation
-    const accessToken = createAccessToken({ _id: user._id});
+    const accessToken = createAccessToken({ _id: user._id });
     const response = NextResponse.json({
       message: "User LoggedIn",
       status: true,
