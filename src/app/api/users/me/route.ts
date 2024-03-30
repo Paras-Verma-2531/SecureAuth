@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
   try {
     const userId=getDataFromToken(request);
     const user=await User.findOne({_id:userId}).select("-password");
+    if(!user)return NextResponse.json({error:"User Not found",status:"404"});
    const response= NextResponse.json({
     message:"User found",
     data:user
