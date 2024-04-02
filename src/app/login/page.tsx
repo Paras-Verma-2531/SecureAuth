@@ -2,9 +2,9 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import toast from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
+import axiosConfig from "@/helpers/axiosHelper";
 export default function LoginPage() {
   const [user, setUser] = useState({
     email: "",
@@ -13,7 +13,7 @@ export default function LoginPage() {
   async function onLogin() {
     try {
       setLoading(true);
-      const response = await axios.post("/api/users/login", user);
+      const response = await axiosConfig.post("/login",user);
       const { message, error } = response.data;
       if (error) toast.error(error);
       else {
